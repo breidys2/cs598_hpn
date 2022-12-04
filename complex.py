@@ -40,7 +40,14 @@ class TM(Packet):
                     ByteField("f10", 255),
                     ByteField("f11", 255),
                     ByteField("f12", 255),
-                    ByteField("f13", 255)]
+                    ByteField("f13", 255),
+                    ByteField("f14", 255),
+                    ByteField("f15", 255),
+                    ByteField("f16", 255),
+                    ByteField("f17", 255),
+                    ByteField("f18", 255),
+                    ByteField("f19", 255),
+                    ByteField("f20", 255)]
 
 bind_layers(Ether, TM, type=0x1234)
 
@@ -123,6 +130,13 @@ def main():
                     out_str += get_str(tm.f11)
                     out_str += get_str(tm.f12)
                     out_str += get_str(tm.f13)
+                    out_str += get_str(tm.f14)
+                    out_str += get_str(tm.f15)
+                    out_str += get_str(tm.f16)
+                    out_str += get_str(tm.f17)
+                    out_str += get_str(tm.f18)
+                    out_str += get_str(tm.f19)
+                    out_str += get_str(tm.f20)
                     out_str += "\n"
                     print(tm.head_location)
                     for j in range(tm.head_location):

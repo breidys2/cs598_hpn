@@ -47,6 +47,13 @@ header tm_t {
     bit<8> f11;
     bit<8> f12;
     bit<8> f13;
+    bit<8> f14;
+    bit<8> f15;
+    bit<8> f16;
+    bit<8> f17;
+    bit<8> f18;
+    bit<8> f19;
+    bit<8> f20;
 }
 
 #define START 3
@@ -116,9 +123,6 @@ control MyIngress(inout headers hdr,
     action operation_drop() {
         mark_to_drop(standard_metadata);
     }
-    action inc() {
-        hdr.tm.f13 = hdr.tm.f13 + 1;
-    }
     action send_back() {
         bit<48> tmp;
 
@@ -137,26 +141,12 @@ control MyIngress(inout headers hdr,
         }
         actions = {
             send_back();
-            inc;
         }
         const entries = {
             //4: send_back();
             5: send_back();
         }
-        const default_action = inc();
     }
-    table too_much_recirc {
-        key = {
-            hdr.tm.f13        : exact;
-        }
-        actions = {
-            send_back();
-        }
-        const entries = {
-            30: send_back();
-        }
-    }
-
     action init_a() {
         hdr.tm.f0 = START;
         hdr.tm.head_location = hdr.tm.head_location + 1;
@@ -193,6 +183,14 @@ control MyIngress(inout headers hdr,
         if (hdr.tm.head_location == 10) cur_val = hdr.tm.f10;
         if (hdr.tm.head_location == 11) cur_val = hdr.tm.f11;
         if (hdr.tm.head_location == 12) cur_val = hdr.tm.f12;
+        if (hdr.tm.head_location == 13) cur_val = hdr.tm.f13;
+        if (hdr.tm.head_location == 14) cur_val = hdr.tm.f14;
+        if (hdr.tm.head_location == 15) cur_val = hdr.tm.f15;
+        if (hdr.tm.head_location == 16) cur_val = hdr.tm.f16;
+        if (hdr.tm.head_location == 17) cur_val = hdr.tm.f17;
+        if (hdr.tm.head_location == 18) cur_val = hdr.tm.f18;
+        if (hdr.tm.head_location == 19) cur_val = hdr.tm.f19;
+        if (hdr.tm.head_location == 20) cur_val = hdr.tm.f20;
         
         if (cur_val == 0) {
             hdr.tm.tm_state = 2;
@@ -211,6 +209,14 @@ control MyIngress(inout headers hdr,
             if (hdr.tm.head_location == 10) hdr.tm.f10 = X;
             if (hdr.tm.head_location == 11) hdr.tm.f11 = X;
             if (hdr.tm.head_location == 12) hdr.tm.f12 = X;
+            if (hdr.tm.head_location == 13) hdr.tm.f13 = X;
+            if (hdr.tm.head_location == 14) hdr.tm.f14 = X;
+            if (hdr.tm.head_location == 15) hdr.tm.f15 = X;
+            if (hdr.tm.head_location == 16) hdr.tm.f16 = X;
+            if (hdr.tm.head_location == 17) hdr.tm.f17 = X;
+            if (hdr.tm.head_location == 18) hdr.tm.f18 = X;
+            if (hdr.tm.head_location == 19) hdr.tm.f19 = X;
+            if (hdr.tm.head_location == 20) hdr.tm.f20 = X;
             hdr.tm.head_location = hdr.tm.head_location - 3;
         }
     }
@@ -240,6 +246,14 @@ control MyIngress(inout headers hdr,
         if (hdr.tm.head_location == 10) cur_val = hdr.tm.f10;
         if (hdr.tm.head_location == 11) cur_val = hdr.tm.f11;
         if (hdr.tm.head_location == 12) cur_val = hdr.tm.f12;
+        if (hdr.tm.head_location == 13) cur_val = hdr.tm.f13;
+        if (hdr.tm.head_location == 14) cur_val = hdr.tm.f14;
+        if (hdr.tm.head_location == 15) cur_val = hdr.tm.f15;
+        if (hdr.tm.head_location == 16) cur_val = hdr.tm.f16;
+        if (hdr.tm.head_location == 17) cur_val = hdr.tm.f17;
+        if (hdr.tm.head_location == 18) cur_val = hdr.tm.f18;
+        if (hdr.tm.head_location == 19) cur_val = hdr.tm.f19;
+        if (hdr.tm.head_location == 20) cur_val = hdr.tm.f20;
         
         if (cur_val == 0 || cur_val == 1) {
             hdr.tm.tm_state = 2;
@@ -258,10 +272,18 @@ control MyIngress(inout headers hdr,
             if (hdr.tm.head_location == 10) hdr.tm.f10 = 1;
             if (hdr.tm.head_location == 11) hdr.tm.f11 = 1;
             if (hdr.tm.head_location == 12) hdr.tm.f12 = 1;
+            if (hdr.tm.head_location == 13) hdr.tm.f13 = 1;
+            if (hdr.tm.head_location == 14) hdr.tm.f14 = 1;
+            if (hdr.tm.head_location == 15) hdr.tm.f15 = 1;
+            if (hdr.tm.head_location == 16) hdr.tm.f16 = 1;
+            if (hdr.tm.head_location == 17) hdr.tm.f17 = 1;
+            if (hdr.tm.head_location == 18) hdr.tm.f18 = 1;
+            if (hdr.tm.head_location == 19) hdr.tm.f19 = 1;
+            if (hdr.tm.head_location == 20) hdr.tm.f20 = 1;
             hdr.tm.head_location = hdr.tm.head_location - 1;
             hdr.tm.tm_state = 3;
         }
-        if (hdr.tm.tm_state == 3 && hdr.tm.head_location == 11) {
+        if (hdr.tm.tm_state == 3 && hdr.tm.head_location == 19) {
             //Goto end
             hdr.tm.tm_state = 5;
         }
@@ -290,6 +312,14 @@ control MyIngress(inout headers hdr,
         if (hdr.tm.head_location == 10) cur_val = hdr.tm.f10;
         if (hdr.tm.head_location == 11) cur_val = hdr.tm.f11;
         if (hdr.tm.head_location == 12) cur_val = hdr.tm.f12;
+        if (hdr.tm.head_location == 13) cur_val = hdr.tm.f13;
+        if (hdr.tm.head_location == 14) cur_val = hdr.tm.f14;
+        if (hdr.tm.head_location == 15) cur_val = hdr.tm.f15;
+        if (hdr.tm.head_location == 16) cur_val = hdr.tm.f16;
+        if (hdr.tm.head_location == 17) cur_val = hdr.tm.f17;
+        if (hdr.tm.head_location == 18) cur_val = hdr.tm.f18;
+        if (hdr.tm.head_location == 19) cur_val = hdr.tm.f19;
+        if (hdr.tm.head_location == 20) cur_val = hdr.tm.f20;
         if (cur_val == X) {
             if (hdr.tm.head_location == 0) hdr.tm.f0 = BLANK;
             if (hdr.tm.head_location == 1) hdr.tm.f1 = BLANK;
@@ -304,6 +334,14 @@ control MyIngress(inout headers hdr,
             if (hdr.tm.head_location == 10) hdr.tm.f10 = BLANK;
             if (hdr.tm.head_location == 11) hdr.tm.f11 = BLANK;
             if (hdr.tm.head_location == 12) hdr.tm.f12 = BLANK;
+            if (hdr.tm.head_location == 13) hdr.tm.f13 = BLANK;
+            if (hdr.tm.head_location == 14) hdr.tm.f14 = BLANK;
+            if (hdr.tm.head_location == 15) hdr.tm.f15 = BLANK;
+            if (hdr.tm.head_location == 16) hdr.tm.f16 = BLANK;
+            if (hdr.tm.head_location == 17) hdr.tm.f17 = BLANK;
+            if (hdr.tm.head_location == 18) hdr.tm.f18 = BLANK;
+            if (hdr.tm.head_location == 19) hdr.tm.f19 = BLANK;
+            if (hdr.tm.head_location == 20) hdr.tm.f20 = BLANK;
             hdr.tm.head_location = hdr.tm.head_location + 1;
             hdr.tm.tm_state = 2;
         } else if (cur_val == START) {
@@ -337,6 +375,14 @@ control MyIngress(inout headers hdr,
         if (hdr.tm.head_location == 10) cur_val = hdr.tm.f10;
         if (hdr.tm.head_location == 11) cur_val = hdr.tm.f11;
         if (hdr.tm.head_location == 12) cur_val = hdr.tm.f12;
+        if (hdr.tm.head_location == 13) cur_val = hdr.tm.f13;
+        if (hdr.tm.head_location == 14) cur_val = hdr.tm.f14;
+        if (hdr.tm.head_location == 15) cur_val = hdr.tm.f15;
+        if (hdr.tm.head_location == 16) cur_val = hdr.tm.f16;
+        if (hdr.tm.head_location == 17) cur_val = hdr.tm.f17;
+        if (hdr.tm.head_location == 18) cur_val = hdr.tm.f18;
+        if (hdr.tm.head_location == 19) cur_val = hdr.tm.f19;
+        if (hdr.tm.head_location == 20) cur_val = hdr.tm.f20;
         if (cur_val != BLANK) {
             hdr.tm.head_location = hdr.tm.head_location + 2;
         } else {
@@ -353,6 +399,14 @@ control MyIngress(inout headers hdr,
             if (hdr.tm.head_location == 10) hdr.tm.f10 = 0;
             if (hdr.tm.head_location == 11) hdr.tm.f11 = 0;
             if (hdr.tm.head_location == 12) hdr.tm.f12 = 0;
+            if (hdr.tm.head_location == 13) hdr.tm.f13 = 0;
+            if (hdr.tm.head_location == 14) hdr.tm.f14 = 0;
+            if (hdr.tm.head_location == 15) hdr.tm.f15 = 0;
+            if (hdr.tm.head_location == 16) hdr.tm.f16 = 0;
+            if (hdr.tm.head_location == 17) hdr.tm.f17 = 0;
+            if (hdr.tm.head_location == 18) hdr.tm.f18 = 0;
+            if (hdr.tm.head_location == 19) hdr.tm.f19 = 0;
+            if (hdr.tm.head_location == 20) hdr.tm.f20 = 0;
             hdr.tm.head_location = hdr.tm.head_location - 2;
             hdr.tm.tm_state = 1;
         } 
@@ -389,7 +443,6 @@ control MyIngress(inout headers hdr,
             }
             log_msg("head_loc = {}, state = {}", {hdr.tm.head_location, hdr.tm.tm_state});
             return_ans.apply();
-            too_much_recirc.apply();
         } else {
             operation_drop();
         }
