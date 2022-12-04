@@ -1,19 +1,4 @@
 /* -*- P4_16 -*- */
-
-/*
- * P4 Calculator
- *
- * This program implements a simple protocol. It can be carried over Ethernet
- * (Ethertype 0x1234).
- *
- * The device receives a packet, performs the requested operation, fills in the
- * result and sends the packet back out of the same port it came in on, while
- * swapping the source and destination addresses.
- *
- * If an unknown operation is specified or the header is not valid, the packet
- * is dropped
- */
-
 #include <core.p4>
 #include <v1model.p4>
 
@@ -30,6 +15,9 @@ header ethernet_t {
     bit<16> etherType;
 }
 
+/*
+ * Custom Turing Machine Header
+ */
 header tm_t {
     bit<8> tm_state;
     bit<8> head_location;
@@ -132,8 +120,6 @@ control MyIngress(inout headers hdr,
     }
     action send_back() {
         bit<48> tmp;
-        log_msg("SENDING BACK INGRESS");
-        log_msg("dst = {}, src = {}, ing_port = {}", {hdr.ethernet.dstAddr, hdr.ethernet.srcAddr, standard_metadata.ingress_port});
 
         /* Swap the MAC addresses */
         tmp = hdr.ethernet.dstAddr;
